@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 
@@ -15,11 +15,14 @@ string prepare(string text)
     return result;
 }
 
+
+
 string encryptKeyless(string text, int column)
 {
-    int row = ceil(text.length()*1.0/column);
+    int row = ceil(text.length() * 1.0 / column);
 
-    while(text.length() < row*column)
+    // Padding
+    while(text.length() < row * column)
         text += 'X';
 
     char matrix[100][100];
@@ -27,9 +30,9 @@ string encryptKeyless(string text, int column)
     int k = 0;
 
     // Fill Row-wise
-    for(int i=0;i<row;i++)
+    for(int i = 0; i < row; i++)
     {
-        for(int j=0;j<column;j++)
+        for(int j = 0; j < column; j++)
         {
             matrix[i][j] = text[k++];
         }
@@ -38,9 +41,9 @@ string encryptKeyless(string text, int column)
     string result = "";
 
     // Read Column-wise
-    for(int j=0;j<column;j++)
+    for(int j = 0; j < column; j++)
     {
-        for(int i=0;i<row;i++)
+        for(int i = 0; i < row; i++)
         {
             result += matrix[i][j];
         }
@@ -49,20 +52,20 @@ string encryptKeyless(string text, int column)
     return result;
 }
 
-//---------------- Keyless Decryption ----------------//
 
-string decryptKeyless(string text,int column)
+
+string decryptKeyless(string text, int column)
 {
-    int row = text.length()/column;
+    int row = text.length() / column;
 
     char matrix[100][100];
 
     int k = 0;
 
     // Fill Column-wise
-    for(int j=0;j<column;j++)
+    for(int j = 0; j < column; j++)
     {
-        for(int i=0;i<row;i++)
+        for(int i = 0; i < row; i++)
         {
             matrix[i][j] = text[k++];
         }
@@ -71,15 +74,16 @@ string decryptKeyless(string text,int column)
     string result = "";
 
     // Read Row-wise
-    for(int i=0;i<row;i++)
+    for(int i = 0; i < row; i++)
     {
-        for(int j=0;j<column;j++)
+        for(int j = 0; j < column; j++)
         {
             result += matrix[i][j];
         }
     }
 
-    while(!result.empty() && result.back()=='X')
+    // Remove Padding
+    while(!result.empty() && result.back() == 'X')
         result.pop_back();
 
     return result;
@@ -90,54 +94,49 @@ vector<int> getKeyOrder(string key)
 {
     vector<pair<char,int>> temp;
 
-    for(int i=0;i<key.length();i++) temp.push_back({toupper(key[i]),i});
+    for(int i = 0; i < key.length(); i++)
+        temp.push_back({toupper(key[i]), i});
 
-    sort(temp.begin(),temp.end());
+    sort(temp.begin(), temp.end());
 
     vector<int> order;
 
-    for(auto x:temp)
+    for(auto x : temp)
         order.push_back(x.second);
 
     return order;
 }
 
 
-string encryptKeyed(string text,string key,bool pad = true)
+
+string encryptKeyed(string text, string key)
 {
     int column = key.length();
-
-    int row = ceil(text.length()*1.0/column);
-
-    if(pad)
-    {
-        while(text.length()<row*column)
-            text+='X';
-    }
+    int row = text.length() / column;
 
     char matrix[100][100];
 
     int k = 0;
 
     // Fill Row-wise
-    for(int i=0;i<row;i++)
+    for(int i = 0; i < row; i++)
     {
-        for(int j=0;j<column;j++)
+        for(int j = 0; j < column; j++)
         {
-            matrix[i][j]=text[k++];
+            matrix[i][j] = text[k++];
         }
     }
 
     vector<int> order = getKeyOrder(key);
 
-    string result="";
+    string result = "";
 
     // Read by Key Order
-    for(int j:order)
+    for(int j : order)
     {
-        for(int i=0;i<row;i++)
+        for(int i = 0; i < row; i++)
         {
-            result+=matrix[i][j];
+            result += matrix[i][j];
         }
     }
 
@@ -145,11 +144,11 @@ string encryptKeyed(string text,string key,bool pad = true)
 }
 
 
-string decryptKeyed(string text,string key,bool removePadding = true)
+
+string decryptKeyed(string text, string key)
 {
     int column = key.length();
-
-    int row = text.length()/column;
+    int row = text.length() / column;
 
     char matrix[100][100];
 
@@ -158,29 +157,23 @@ string decryptKeyed(string text,string key,bool removePadding = true)
     int k = 0;
 
     // Fill by Key Order
-    for(int j:order)
+    for(int j : order)
     {
-        for(int i=0;i<row;i++)
+        for(int i = 0; i < row; i++)
         {
-            matrix[i][j]=text[k++];
+            matrix[i][j] = text[k++];
         }
     }
 
-    string result="";
+    string result = "";
 
     // Read Row-wise
-    for(int i=0;i<row;i++)
+    for(int i = 0; i < row; i++)
     {
-        for(int j=0;j<column;j++)
+        for(int j = 0; j < column; j++)
         {
-            result+=matrix[i][j];
+            result += matrix[i][j];
         }
-    }
-
-    if(removePadding)
-    {
-        while(!result.empty() && result.back()=='X')
-            result.pop_back();
     }
 
     return result;
@@ -196,7 +189,7 @@ string hybridEncrypt(string text, int column, string key)
 
     cout << "\nAfter Keyless Encryption : " << step1 << endl;
 
-    string step2 = encryptKeyed(step1, key, false);
+    string step2 = encryptKeyed(step1, key);
 
     cout << "After Keyed Encryption   : " << step2 << endl;
 
@@ -204,11 +197,12 @@ string hybridEncrypt(string text, int column, string key)
 }
 
 
+
 string hybridDecrypt(string text, int column, string key)
 {
     column = key.length();
 
-    string step1 = decryptKeyed(text, key, false);
+    string step1 = decryptKeyed(text, key);
 
     cout << "\nAfter Keyed Decryption   : " << step1 << endl;
 
