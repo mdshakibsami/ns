@@ -12,7 +12,7 @@ vector<int> getKeyOrder(string key)
 {
     vector<pair<char,int>>temp;
 
-    for(int i=0;i<key.length();i++) temp.push_back({key[i],i});
+    for(int i=0;i<key.length();i++) temp.push_back({toupper(key[i]),i});
 
     sort(temp.begin(),temp.end());
 
