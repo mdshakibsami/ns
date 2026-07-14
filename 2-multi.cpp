@@ -63,6 +63,7 @@ int main()
 
     int key = getKey(inputKey);
     cout<<key<<endl;
+    
     if(gcd(key,26)!=1)
     {
         cout<<"Key must be co-prime with 26!";
